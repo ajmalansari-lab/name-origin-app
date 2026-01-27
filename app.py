@@ -91,9 +91,9 @@ if st.button("🔍 Compare Origin", use_container_width=True):
         flag2 = country_flag(c2)
 
         if c1 == c2:
-            st.markdown("### ✅ Same country of origin")
+            st.markdown("###  Same country of origin")
         else:
-            st.markdown("### 🔍 Different countries of origin")
+            st.markdown("###  Different countries of origin")
 
         st.markdown(f"**{full_name_1} → {flag1} {name1}**")
         st.markdown(f"**{full_name_2} → {flag2} {name2}**")
