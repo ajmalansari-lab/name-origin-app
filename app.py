@@ -32,7 +32,6 @@ def split_full_name(full_name):
         return parts[0], parts[1]
     if len(parts) == 3:
         return f"{parts[0]} {parts[1]}", parts[2]
-    # 4+ words: first two as first name, last word as last name
     return f"{parts[0]} {parts[1]}", parts[-1]
  
 st.set_page_config(
@@ -85,21 +84,20 @@ if st.button("🔍 Compare Origin", use_container_width=True):
         name2 = country_code_to_name(c2)
         flag1 = country_flag(c1)
         flag2 = country_flag(c2)
-        region1 = data[0].get("regionOrigin")
-        region2 = data[1].get("regionOrigin")
+        region1 = data[0].get("regionOrigin", "—")
+        region2 = data[1].get("regionOrigin", "—")
 
         if c1 == c2:
-            st.markdown("###  Same country of origin")
+            st.markdown("### Same country of origin")
         else:
-            st.markdown("###  Different countries of origin")
- 
-        st.markdown(f"**{full_name_1} → {flag1} {name1}**")
-        if region1:
-            st.caption(f"Region: {region1}")
+            st.markdown("### Different countries of origin")
 
-        st.markdown(f"**{full_name_2} → {flag2} {name2}**")
-        if region2:
-            st.caption(f"Region: {region2}")
+        table_data = {
+            "Name": [full_name_1, full_name_2],
+            "Country of Origin": [f"{flag1} {name1}", f"{flag2} {name2}"],
+            "Region": [region1, region2],
+        }
+        st.table(table_data)
  
     except Exception as e:
         st.error(f"API Error: {e}")
