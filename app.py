@@ -32,7 +32,6 @@ def split_full_name(full_name):
         return parts[0], parts[1]
     if len(parts) == 3:
         return f"{parts[0]} {parts[1]}", parts[2]
-    # 4+ words: first two as first name, last word as last name
     return f"{parts[0]} {parts[1]}", parts[-1]
 
 st.set_page_config(
@@ -41,21 +40,40 @@ st.set_page_config(
     layout="centered"
 )
 
+# Inject JS to make Tab move from sender input to recipient input
+st.markdown("""
+<script>
+document.addEventListener("keydown", function(e) {
+    if (e.key === "Tab") {
+        const inputs = Array.from(document.querySelectorAll('input[type="text"]'));
+        const focused = document.activeElement;
+        const idx = inputs.indexOf(focused);
+        if (idx !== -1 && idx < inputs.length - 1) {
+            e.preventDefault();
+            inputs[idx + 1].focus();
+        }
+    }
+});
+</script>
+""", unsafe_allow_html=True)
+
 st.title("🌍 Name Origin Comparator")
 st.caption("Paste full names to compare country of origin")
 st.divider()
 
-col1, col2 = st.columns(2)
-with col1:
-    st.subheader("Person 1")
-    full_name_1 = st.text_input("Full Name", placeholder="e.g. Alice Smith")
-with col2:
-    st.subheader("Person 2")
-    full_name_2 = st.text_input("Full Name", placeholder="e.g. Raj Patel")
+with st.form("name_form"):
+    col1, col2 = st.columns(2)
+    with col1:
+        st.subheader("Sender Name")
+        full_name_1 = st.text_input("Full Name", placeholder="e.g. Alice Smith", label_visibility="collapsed")
+    with col2:
+        st.subheader("Recipient Name")
+        full_name_2 = st.text_input("Full Name", placeholder="e.g. Raj Patel", label_visibility="collapsed")
 
-st.divider()
+    st.divider()
+    submitted = st.form_submit_button("🔍 Compare Origin", use_container_width=True)
 
-if st.button("🔍 Compare Origin", use_container_width=True):
+if submitted:
     fn1, ln1 = split_full_name(full_name_1)
     fn2, ln2 = split_full_name(full_name_2)
 
@@ -85,15 +103,20 @@ if st.button("🔍 Compare Origin", use_container_width=True):
         name2 = country_code_to_name(c2)
         flag1 = country_flag(c1)
         flag2 = country_flag(c2)
+        region1 = data[0].get("regionOrigin", "—")
+        region2 = data[1].get("regionOrigin", "—")
 
         if c1 == c2:
-            st.markdown("###  Same country of origin")
+            st.markdown("### Same country of origin")
         else:
-            st.markdown("###  Different countries of origin")
+            st.markdown("### Different countries of origin")
 
-        st.markdown(f"**{full_name_1} → {flag1} {name1}**")
-        st.markdown(f"**{full_name_2} → {flag2} {name2}**")
+        table_data = {
+            "Name": [full_name_1, full_name_2],
+            "Country of Origin": [f"{flag1} {name1}", f"{flag2} {name2}"],
+            "Region": [region1, region2],
+        }
+        st.table(table_data)
 
     except Exception as e:
         st.error(f"API Error: {e}")
-
