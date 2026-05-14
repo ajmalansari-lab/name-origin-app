@@ -60,7 +60,7 @@ document.addEventListener("keydown", function(e) {
 </style>
 """, unsafe_allow_html=True)
 
-st.title("Name Origin Comparator")
+st.title("Name Origin Search")
 st.caption("Paste full names to compare country of origin")
 
 st.divider()
