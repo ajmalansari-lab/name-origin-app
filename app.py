@@ -16,12 +16,6 @@ def country_code_to_name(code):
     country = pycountry.countries.get(alpha_2=code)
     return country.name if country else code
 
-def country_flag(code):
-    try:
-        return "".join(chr(127397 + ord(c)) for c in code.upper())
-    except:
-        return ""
-
 def split_full_name(full_name):
     parts = full_name.strip().split()
     if len(parts) == 0:
@@ -36,11 +30,10 @@ def split_full_name(full_name):
 
 st.set_page_config(
     page_title="Name Origin Comparator",
-    page_icon="🌍",
+    page_icon="𝓝",
     layout="centered"
 )
 
-# JS: Tab moves between inputs, Enter triggers compare button
 st.markdown("""
 <script>
 document.addEventListener("keydown", function(e) {
@@ -59,10 +52,6 @@ document.addEventListener("keydown", function(e) {
     }
 });
 </script>
-""", unsafe_allow_html=True)
-
-# Remove form border via CSS
-st.markdown("""
 <style>
 [data-testid="stForm"] {
     border: none;
@@ -71,7 +60,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.title("🌍 Name Origin Comparator")
+st.title("Name Origin Comparator")
 st.caption("Paste full names to compare country of origin")
 
 st.divider()
@@ -116,8 +105,6 @@ if submitted:
         c2 = data[1]["countryOrigin"]
         name1 = country_code_to_name(c1)
         name2 = country_code_to_name(c2)
-        flag1 = country_flag(c1)
-        flag2 = country_flag(c2)
         region1 = data[0].get("regionOrigin", "—")
         region2 = data[1].get("regionOrigin", "—")
 
@@ -128,7 +115,7 @@ if submitted:
 
         table_data = {
             "Name": [full_name_1, full_name_2],
-            "Country of Origin": [f"{flag1} {name1}", f"{flag2} {name2}"],
+            "Country of Origin": [name1, name2],
             "Region": [region1, region2],
         }
         st.table(table_data)
