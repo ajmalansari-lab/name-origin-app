@@ -43,18 +43,20 @@ st.set_page_config(
 st.title("🌍 Name Origin Comparator")
 st.caption("Paste full names to compare country of origin")
 st.divider()
- 
-col1, col2 = st.columns(2)
-with col1:
-    st.subheader("Sender Name")
-    full_name_1 = st.text_input("Full Name", placeholder="e.g. Alice Smith")
-with col2:
-    st.subheader("Recipient Name")
-    full_name_2 = st.text_input("Full Name", placeholder="e.g. Raj Patel")
- 
-st.divider()
- 
-if st.button("🔍 Compare Origin", use_container_width=True):
+
+with st.form("name_form"):
+    col1, col2 = st.columns(2)
+    with col1:
+        st.subheader("Sender Name")
+        full_name_1 = st.text_input("Full Name", placeholder="e.g. Alice Smith")
+    with col2:
+        st.subheader("Recipient Name")
+        full_name_2 = st.text_input("Full Name", placeholder="e.g. Raj Patel")
+
+    st.divider()
+    submitted = st.form_submit_button("🔍 Compare Origin", use_container_width=True)
+
+if submitted:
     fn1, ln1 = split_full_name(full_name_1)
     fn2, ln2 = split_full_name(full_name_2)
  
