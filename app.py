@@ -30,7 +30,7 @@ def split_full_name(full_name):
 
 st.set_page_config(
     page_title="Name Origin Comparator",
-    page_icon="𝓝",
+    page_icon="🌐",
     layout="centered"
 )
 
