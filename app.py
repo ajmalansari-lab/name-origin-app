@@ -29,8 +29,8 @@ def split_full_name(full_name):
     return f"{parts[0]} {parts[1]}", parts[-1]
 
 st.set_page_config(
-    page_title="Name Origin Comparator",
-    page_icon="🌐",
+    page_title="🌍Name Origin Search",
+    page_icon="🌍",
     layout="centered"
 )
 
