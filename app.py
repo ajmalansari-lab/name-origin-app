@@ -40,25 +40,40 @@ st.set_page_config(
     layout="centered"
 )
 
-# Inject JS to make Tab move from sender input to recipient input
+# JS: Tab moves between inputs, Enter triggers compare button
 st.markdown("""
 <script>
 document.addEventListener("keydown", function(e) {
-    if (e.key === "Tab") {
-        const inputs = Array.from(document.querySelectorAll('input[type="text"]'));
-        const focused = document.activeElement;
-        const idx = inputs.indexOf(focused);
-        if (idx !== -1 && idx < inputs.length - 1) {
-            e.preventDefault();
-            inputs[idx + 1].focus();
-        }
+    const inputs = Array.from(document.querySelectorAll('input[type="text"]'));
+    const focused = document.activeElement;
+    const idx = inputs.indexOf(focused);
+
+    if (e.key === "Tab" && idx !== -1 && idx < inputs.length - 1) {
+        e.preventDefault();
+        inputs[idx + 1].focus();
+    }
+
+    if (e.key === "Enter" && idx !== -1) {
+        const btn = document.querySelector('button[kind="primary"]');
+        if (btn) btn.click();
     }
 });
 </script>
 """, unsafe_allow_html=True)
 
+# Remove form border via CSS
+st.markdown("""
+<style>
+[data-testid="stForm"] {
+    border: none;
+    padding: 0;
+}
+</style>
+""", unsafe_allow_html=True)
+
 st.title("🌍 Name Origin Comparator")
 st.caption("Paste full names to compare country of origin")
+
 st.divider()
 
 with st.form("name_form"):
